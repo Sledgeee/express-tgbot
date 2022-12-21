@@ -15,6 +15,10 @@ bot.on('message', async (req) => {
     bot.sendMessage(req.chat.id, JSON.stringify(docs))
 })
 
+app.get('/test', () => {
+    return 'test endpoint'
+})
+
 const startServer = () => {
     app.listen(PORT)
     console.log('App started on PORT %d', PORT)
