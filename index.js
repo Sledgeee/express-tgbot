@@ -5,7 +5,7 @@ const dayjs = require('dayjs')
 const TelegramBot = require('node-telegram-bot-api')
 const Birthday = require('./models/birthday')
 
-const PORT = 3000
+const PORT = 80
 const app = express()
 const bot = new TelegramBot('5849311402:AAFSPPkjQu7Xc0Ltbxfi83d6-NgkOgM6SE4', { polling: true })
 
@@ -15,13 +15,14 @@ bot.on('message', async (req) => {
     bot.sendMessage(req.chat.id, JSON.stringify(docs))
 })
 
-app.get('/test', () => {
-    return 'test endpoint'
+app.get('/test', (req, res) => {
+    res.send('test endpoint')
 })
 
 const startServer = () => {
-    app.listen(PORT)
-    console.log('App started on PORT %d', PORT)
+    app.listen(PORT, () => {
+        console.log('App started on PORT %d', PORT)
+    })
 }
 
 const connectDb = () => {
