@@ -1,6 +1,10 @@
 const ScheduleModel = require('../models/scheduleModel')
 
 class ScheduleController {
+    static async addLessonToSchedule(day, lesson, number) {
+
+    }
+
     static async generateFullPlainSchedule() {
         try {
             const docs = await ScheduleModel.find().populate('lessons')
@@ -37,10 +41,6 @@ class ScheduleController {
             console.log(err)
             return 'Під час генерації розкладу щось пішло не так ❌'
         }
-    }
-    
-    static async updateDaySchedule() {
-    
     }
 }
 

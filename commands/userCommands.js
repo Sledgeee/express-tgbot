@@ -52,19 +52,19 @@ bot.on('message', async (msg) => {
         case '/help@ki_scheduleBot':
             await BotController.sendUserHelp(msg.chat.id)
             break
-        case '/help admin':
+        case '/help ;admin':
             await BotController.sendAdminHelp(msg.chat.id)
             break
-        case '/help@ki_scheduleBot admin':
+        case '/help@ki_scheduleBot ;admin':
             await BotController.sendAdminHelp(msg.chat.id)
             break  
     }
 })
 
-bot.onText(/\/playlist (.+)/, async (msg, match) => {
+bot.onText(/\/playlist ;(.+)/, async (msg, match) => {
     await BotController.sendPlaylist(msg.chat.id, match[1])
-})
+})  
 
-bot.onText(/\/playlist@ki_scheduleBot (.+)/, async (msg, match) => {
+bot.onText(/\/playlist@ki_scheduleBot ;(.+)/, async (msg, match) => {
     await BotController.sendPlaylist(msg.chat.id, match[1])
 })

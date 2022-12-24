@@ -28,20 +28,24 @@ const callAsync = async (func, username, superRights = false, ...args) => {
                 : responseMessages.noRights + ownerInfo.username
 }
 
-bot.onText(/\/addAdmin (.+)/, async (msg, match) => {
-    bot.sendMessage(msg.chat.id, await callAsync(AdminController.addAdmin, msg.from.username, true, match[1]))
+bot.onText(/\/addAdmin ;(.+)/, async (msg, match) => {
+    bot.sendMessage(msg.chat.id, await callAsync(AdminController.addAdmin, 
+        msg.from.username, true, match[1]))
 })
 
-bot.onText(/\/addTeacher (.+)/, async (msg, match) => {
-    bot.sendMessage(msg.chat.id, await callAsync(TeacherController.createTeacher, msg.from.username, false, match[1]))
+bot.onText(/\/addTeacher ;(.+)/, async (msg, match) => {
+    bot.sendMessage(msg.chat.id, await callAsync(TeacherController.createTeacher, 
+        msg.from.username, false, match[1]))
 })
 
-bot.onText(/\/addBirthday (.+) (.+)/, async (msg, match) => {
-    bot.sendMessage(msg.chat.id, await callAsync(BirthdayController.addBirthday, msg.from.username, false, match[1], match[2]))
+bot.onText(/\/addBirthday ;(.+) ;(.+)/, async (msg, match) => {
+    bot.sendMessage(msg.chat.id, await callAsync(BirthdayController.addBirthday, 
+        msg.from.username, false, match[1], match[2]))
 })
 
-bot.onText(/\/addPlaylist (.+)/, async (msg, match) => {
-    bot.sendMessage(msg.chat.id, await callAsync(PlaylistController.addNewPlaylist, msg.from.username, false, match[1]))
+bot.onText(/\/addPlaylist ;(.+)/, async (msg, match) => {
+    bot.sendMessage(msg.chat.id, await callAsync(PlaylistController.addNewPlaylist, 
+        msg.from.username, false, match[1]))
 })
 
 bot.onText(/\/updateWeek/, (msg) => {
@@ -49,9 +53,11 @@ bot.onText(/\/updateWeek/, (msg) => {
 })
 
 bot.onText(/\/seedLessonTypes/, async (msg) => {
-    bot.sendMessage(msg.chat.id, await callAsync(LessonController.seedLessonTypes, msg.from.username))
+    bot.sendMessage(msg.chat.id, await callAsync(LessonController.seedLessonTypes, 
+        msg.from.username))
 })
 
-bot.onText(/\/addLesson (.+) (.+) (.+)/, async (msg, match) => {
-    bot.sendMessage(msg.chat.id, await callAsync(LessonController.createLesson, msg.from.username, false, match[1], match[2], match[3]))
+bot.onText(/\/addLesson ;(.+) ;(.+) ;(.+) ;(.+)/, async (msg, match) => {
+    bot.sendMessage(msg.chat.id, await callAsync(LessonController.createLesson, 
+        msg.from.username, false, match[1], match[2], match[3], match[4]))
 })

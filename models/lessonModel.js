@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 const lessonSchema = new mongoose.Schema({
     name: String,
+    shortName: String,
     lessonType: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "LessonType"

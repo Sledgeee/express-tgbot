@@ -23,16 +23,23 @@ class LessonController {
         }
     }
 
-    static async createLesson(name, type, teacher) {
+    static async createLesson(name, shortName, typesStr, teachersStr) {
         try {
-            const lessontype = await LessonTypeModel.findOne({type: type})
-            const tchr = await TeacherController.findOne({name: teacher})
-            if (!lessontype || !tchr) return false
-            await LessonModel.create({
-                name: name,
-                lessonType: lessontype.id,
-                teacher: tchr.id
-            })
+            const types = typesStr.split(', ')
+            const teachers = teachersStr.split(', ')
+            const lessons = []
+            for (let i = 0; i < types.length; i++) {
+                const lessonType = await LessonTypeModel.findOne({type: types[i]})
+                const teacher = await TeacherController.findOne(teachers[i])   
+                if (!teacher || !lessonType) return false
+                lessons.push({
+                        name: name,
+                        shortName: shortName,
+                        lessonType: lessonType.id,
+                        teacher: teacher.id
+                    })
+            }
+            await LessonModel.create(lessons)
             return true
         } catch (err) {
             console.log(err)
