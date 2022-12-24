@@ -3,6 +3,7 @@ const DateTime = require('../lib/datetime')
 
 const checkSchedule = () => {
     cron.schedule('*/5 7-20 * * 1-6', async () => {
+        console.log('Cron: Check schedule job working')
         try {
             const now = DateTime.now()
 
@@ -24,10 +25,11 @@ const checkSchedule = () => {
         catch (err) {
             console.log(err)
         }
+        console.log('Cron: Check schedule job done')
     }, {
         timezone: 'Europe/Kiev'
     })
-    console.log(`Check schedule has started`)
+    console.log(`Cron: Check schedule job scheduled`)
 }
 
 module.exports = checkSchedule

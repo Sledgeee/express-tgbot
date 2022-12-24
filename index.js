@@ -1,9 +1,10 @@
-const { connectDb, disconnectDb } = require('./lib/mongo')
-
+require('dotenv').config()
 require('./commands/adminCommands')
 require('./commands/userCommands')
 require('./callbacks/startCallbacks')
 require('./callbacks/agreeCallbacks')
+
+const { connectDb, disconnectDb } = require('./lib/mongo')
 
 connectDb()
     .on('error', console.log)

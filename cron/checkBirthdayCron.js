@@ -5,6 +5,7 @@ const DateTime = require('../lib/datetime')
 
 const checkBirthday = () => {
     cron.schedule('0 0 * * *', async () => {
+        console.log('Cron: Check birthday job working')
         try {
             const birthdays = await BirthdayModel.find()
             const today = DateTime.nowFormatted().replace('-', '.')
@@ -18,10 +19,11 @@ const checkBirthday = () => {
         catch (err) {
             console.log(err)
         }
+        console.log('Cron: Check birthday job done')
     }, {
         timezone: 'Europe/Kiev'
     })
-    console.log(`Check birthday has started`)
+    console.log(`Cron: Check birthday job scheduled`)
 }
 
 module.exports = checkBirthday
