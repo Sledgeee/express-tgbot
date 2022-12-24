@@ -7,7 +7,7 @@ class TimetableController {
         if (docs.length > 0) {
             const ft = (number) => number < 10 ? `0${number}` : number
             docs.forEach(doc => {
-                const lesson = `Пара №${doc.number}:`
+                const lesson = `№${doc.number}:`
                 const start = `${ft(doc.startHour)}:${ft(doc.startMinute)}-${ft(doc.endHour)}:${ft(doc.endMinute)}`
                 const breakStr = doc.break > 0 ? `(перерва ${doc.break} хв)` : ''
                 plainText += `${lesson} ${start} ${breakStr}\n`

@@ -5,13 +5,13 @@ bot.on('callback_query', async (callback) => {
     try {
         switch(callback.data) {
             case 'playlist':
-                await BotController.sendLatestPlaylist(callback.message.chat.id, 0)
+                await BotController.sendPlaylist(msg.chat.id, 'latest')
                 break
             case 'schedule':
-                bot.sendMessage(callback.message.chat.id, 'Ще не додано')
+                await BotController.sendFullSchedule(await bot.sendMessage(msg.chat.id, 'Генерація...'))
                 break
             case 'timetable':
-                await BotController.sendTimetable(callback.message.chat.id)
+                await BotController.sendTimetable(await bot.sendMessage(msg.chat.id, 'Генерація...'))
                 break
         }
     } catch (err) {

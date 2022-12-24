@@ -9,20 +9,29 @@ class BotController {
         bot.sendMessage(chatId, await PlaylistController.getPlaylist(mode))
     }
     
-    static async sendTimetable(chatId) {
-        bot.sendMessage(chatId, await TimetableController.createPlainTimetable())
+    static async sendTimetable(message) {
+        bot.editMessageText(await TimetableController.createPlainTimetable(), {
+            chat_id: message.chat.id,
+            message_id: message.message_id
+        })
     }
     
     static async sendWeek(chatId) {
         bot.sendMessage(chatId, await WeekController.getWeek())
     }
     
-    static async sendFullSchedule(chatId) {
-        bot.sendMessage(chatId, await ScheduleController.generateFullPlainSchedule())
+    static async sendFullSchedule(message) {
+        bot.editMessageText(await ScheduleController.generateFullPlainSchedule(), {
+            chat_id: message.chat.id,
+            message_id: message.message_id
+        })
     }
     
-    static async sendTodaysSchedule(chatId) {
-        bot.sendMessage(chatId, await ScheduleController.generateTodaysPlainSchedule())
+    static async sendTodaysSchedule(message) {
+        bot.editMessageText(await ScheduleController.generateTodaysPlainSchedule(), {
+            chat_id: message.chat.id,
+            message_id: message.message_id
+        })
     }
 
     static async sendCock(chatId) {
@@ -34,24 +43,25 @@ class BotController {
         await bot.sendMessage(chatId, `Твій 🐓 ${cockSize} см ${reactionOnSize}`)
     }
 
-    static async sendUserHelp(chatId) {
-        await bot.sendMessage(chatId, 
-            'Перелік команд юзера:\n' +
-            'УВАГА! Параметри команди пишуться в один рядок з командою. Приклад: /playlist all'
-        )
+    static async sendUserHelp(chatId, commands) {
+        let help = ''
+        Object.values(commands).forEach(value => {
+            help += value.help
+        })
+        await bot.sendMessage(chatId, 'Перелік команд юзера:\n' + help)
     }
 
-    static async sendAdminHelp(chatId) {
+    static async sendAdminHelp(chatId, commands) {
+        let help = ''
+        commands.forEach(command => {
+            help += command
+        })
         await bot.sendMessage(chatId,
-            'Перелік команд адміністратора:\n' +
-            '/addAdmin - Додати адміна. Параметри: [Телеграм юзернейм]\n' +
-            '/addBirthday - Додати студента до списку ДР. Параметри: [Прізвище Ім\'я] [Дата (Приклад: 18.08)]\n' +
-            '/addPlaylist - Додати плейліст. Параметри: [Посилання]\n' +
-            '/updateWeek - Синхронізація тижня з isu1 (Чисельник/Знаменник)\n' +
-            '/addLesson - Додати пар. Параметри: [Назва] [Абревіатура] [Типи (Приклад: пр., лаб., лекц.)] [Викладач (Приклад: Лисенко С.М.)]\n' +
-            '/seedLessonTypes - Сід типів пар\n' +
-            '/addTeacher - Додати викладача. Параметри: [ПІБ (Приклад: Лисенко С.М.)]\n\n' + 
-            'УВАГА! Параметри команди пишуться в один рядок з командою. Приклад: /addTeacher Лисенко С.М.'
+            'Перелік команд адміністратора:\n' + 
+            help + '\n<b>УВАГА! Параметри команди пишуться з ; в початку. Приклад: /command ;parameter</b>',
+            {
+                parse_mode: 'HTML'
+            }
         )
     }
 }

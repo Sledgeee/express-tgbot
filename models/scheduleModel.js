@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 
 const scheduleSchema = new mongoose.Schema({
-    day: Number,
+    day: String,
+    dayNumber: Number,
     number: Number,
     lesson: {
         type: mongoose.Schema.Types.ObjectId,

@@ -8,14 +8,14 @@ class PlaylistController {
                 case 'all':
                     let playlists = ''
                         docs.forEach((doc, i) => {
-                        playlists += `Плейліст №${i+1}: ${doc.link}\n`
+                        playlists += `№${i+1}: ${doc.link}\n`
                     })
                     return playlists
-                default:
+                case 'latest':
                     return docs.pop().link
             }
         }
-        return 'Ні одного плейліста ще не додано'
+        return 'Ні одного плейліста ще не додано ⚠️'
     }
 
     static async addNewPlaylist(link) {

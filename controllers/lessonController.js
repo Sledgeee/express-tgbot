@@ -3,6 +3,14 @@ const LessonModel = require('../models/lessonModel')
 const TeacherController = require('./teacherController')
 
 class LessonController {
+    static async findById(id) {
+        return await LessonTypeModel.findById(id)
+    }
+
+    static async findOne(data) {
+        return await LessonModel.findOne(data)
+    }
+
     static async seedLessonTypes() {
         try {
             await LessonTypeModel.create([
@@ -23,6 +31,16 @@ class LessonController {
         }
     }
 
+    static async getAllLessons() {
+        try {
+            const docs = await LessonModel.find().populate('lessonType').populate('teacher')
+            return docs.toString()
+        } catch (err) {
+            console.log(err)
+            return 'Помилка'
+        }
+    }
+
     static async createLesson(name, shortName, typesStr, teachersStr) {
         try {
             const types = typesStr.split(', ')
@@ -30,7 +48,7 @@ class LessonController {
             const lessons = []
             for (let i = 0; i < types.length; i++) {
                 const lessonType = await LessonTypeModel.findOne({type: types[i]})
-                const teacher = await TeacherController.findOne(teachers[i])   
+                const teacher = await TeacherController.findOne({name: teachers[i]})   
                 if (!teacher || !lessonType) return false
                 lessons.push({
                         name: name,

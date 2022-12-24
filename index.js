@@ -1,8 +1,6 @@
 require('dotenv').config()
-require('./commands/adminCommands')
-require('./commands/userCommands')
-require('./callbacks/startCallbacks')
-require('./callbacks/agreeCallbacks')
+require('./commands/setupCommands')
+require('./callbacks/setupCallbacks')
 
 const { connectDb, disconnectDb } = require('./lib/mongo')
 

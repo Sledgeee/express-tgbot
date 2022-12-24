@@ -1,9 +1,12 @@
 const TeacherModel = require('../models/teacherModel')
 
 class TeacherController {
-    static async findOne(name) {
-        console.log(name)
-        return await TeacherModel.findOne({name: name})
+    static async findById(id) {
+        return await TeacherModel.findById(id)
+    }
+
+    static async findOne(data) {
+        return await TeacherModel.findOne(data)
     }
 
     static async createTeacher(teacher) {

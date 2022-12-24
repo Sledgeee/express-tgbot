@@ -1,24 +1,24 @@
 const cron = require('node-cron')
 const DateTime = require('../lib/datetime')
+const days = require('../data/days')
 
 const checkSchedule = () => {
     cron.schedule('*/5 7-20 * * 1-6', async () => {
         console.log('Cron: Check schedule job working')
         try {
             const now = DateTime.now()
-
             switch(now.day()) {
-                case 1:
+                case days.MONDAY.number:
                     break
-                case 2:
+                case days.TUESDAY.number:
                     break
-                case 3:
+                case days.WEDNESDAY.number:
                     break
-                case 4:
+                case days.THIRSDAY.number:
                     break
-                case 5:
+                case days.FRIDAY.number:
                     break
-                case 6:
+                case days.SATURDAY.number:
                     break
             }
         }
