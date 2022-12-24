@@ -1,14 +1,12 @@
 const mongoose = require("mongoose");
 
 const scheduleSchema = new mongoose.Schema({
-    day: String,
+    day: Number,
     lessons: [{
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Lesson"
     }],
     isWeekend: Boolean
 })
 
-const Schedule = mongoose.model('Schedule', scheduleSchema)
-
-module.exports = {Schedule}
+module.exports = mongoose.model('Schedule', scheduleSchema)

@@ -1,11 +1,8 @@
-const checkBirthday = require("./checkBirthday")
-const swapWeekType = require("./swapWeekType")
-const checkSchedule = require('./checkSchedule')
-
 const setupCron = () => {
-    swapWeekType()
-    checkBirthday()
-    checkSchedule()
+    require("./checkBirthdayCron")()
+    require("./swapWeekTypeCron")()
+    require("./checkScheduleCron")()
+    require("./notifyScheduleCron")()
 }
 
 module.exports = setupCron

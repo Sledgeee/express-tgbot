@@ -1,11 +1,11 @@
 const { bot } = require("../lib/bot")
-const { sendLatestPlaylist } = require("../services/sender")
+const BotController = require('../controllers/botController')
 
 bot.on('callback_query', async (callback) => {
     try {
         switch(callback.data) {
             case 'yes_playlist':
-                await sendLatestPlaylist(callback.message.chat.id, -1)
+                await BotController.sendLatestPlaylist(callback.message.chat.id, -1)
                 break
             case 'no_playlist':
                 bot.sendMessage(callback.message.chat.id, 'Операцію відмінено ❌')

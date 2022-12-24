@@ -24,6 +24,8 @@ const checkSchedule = () => {
         catch (err) {
             console.log(err)
         }
+    }, {
+        timezone: 'Europe/Kiev'
     })
     console.log(`Check schedule has started`)
 }

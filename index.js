@@ -1,9 +1,9 @@
 const { connectDb, disconnectDb } = require('./lib/mongo')
 
-require('./commands/tech')
-require('./commands/common')
-require('./callbacks/start')
-require('./callbacks/agree')
+require('./commands/adminCommands')
+require('./commands/userCommands')
+require('./callbacks/startCallbacks')
+require('./callbacks/agreeCallbacks')
 
 connectDb()
     .on('error', console.log)
