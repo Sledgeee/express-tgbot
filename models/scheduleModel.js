@@ -1,13 +1,17 @@
 const mongoose = require("mongoose");
 
 const scheduleSchema = new mongoose.Schema({
-    day: String,
-    dayNumber: Number,
-    number: Number,
-    lesson: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Lesson"
-    }
-})
+  day: String,
+  dayNumber: Number,
+  number: Number,
+  week: String,
+  lesson: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Lesson",
+  },
+});
 
-module.exports = mongoose.model('Schedule', scheduleSchema)
+const weeks = ["Чисельник", "Знаменник", "-"];
+const ScheduleModel = mongoose.model("Schedule", scheduleSchema);
+
+module.exports = { ScheduleModel, weeks };

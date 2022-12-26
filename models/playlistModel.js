@@ -1,7 +1,7 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const playlistSchema = new mongoose.Schema({
-    link: String,
-})
+  link: String,
+});
 
-module.exports = mongoose.model('Playlist', playlistSchema)
+module.exports = mongoose.model("Playlist", playlistSchema);

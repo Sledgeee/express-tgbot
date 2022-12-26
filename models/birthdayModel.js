@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 
 const birthdaySchema = new mongoose.Schema({
-    studentName: String,
-    date: String
-})
+  studentName: String,
+  date: String,
+});
 
-module.exports = mongoose.model('Birthday', birthdaySchema)
+module.exports = mongoose.model("Birthday", birthdaySchema);

@@ -1,16 +1,20 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const lessonSchema = new mongoose.Schema({
-    name: String,
-    shortName: String,
-    lessonType: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "LessonType"
-    },
-    teacher: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Teacher"
-    }
-})
+  name: String,
+  shortName: String,
+  type: String,
+  teacher: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Teacher",
+  },
+  zoom: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Zoom",
+  },
+});
 
-module.exports = mongoose.model('Lesson', lessonSchema)
+const LessonModel = mongoose.model("Lesson", lessonSchema);
+const types = ["пр.", "лаб.", "лекц."];
+
+module.exports = { LessonModel, types };

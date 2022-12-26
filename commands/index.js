@@ -1,0 +1,2 @@
+require("./adminCommands");
+require("./userCommands");
