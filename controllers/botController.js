@@ -9,19 +9,22 @@ const { getJobsMenu } = require("../lib/cron");
 
 class BotController {
   static async sendPlaylist(chatId, mode) {
-    bot.sendMessage(chatId, await PlaylistController.getPlaylist(mode));
+    await bot.sendMessage(chatId, await PlaylistController.getPlaylist(mode));
   }
 
   static async sendTimetable(chatId) {
     const message = await sendLoadingText(chatId);
-    bot.editMessageText(await TimetableController.createPlainTimetable(), {
-      chat_id: message.chat.id,
-      message_id: message.message_id,
-    });
+    await bot.editMessageText(
+      await TimetableController.createPlainTimetable(),
+      {
+        chat_id: message.chat.id,
+        message_id: message.message_id,
+      }
+    );
   }
 
   static async sendWeek(chatId) {
-    bot.sendMessage(chatId, await WeekController.getWeek());
+    await bot.sendMessage(chatId, await WeekController.getWeek());
   }
 
   static async sendLinkMarkup(chatId) {
@@ -55,7 +58,7 @@ class BotController {
   static async sendTodaysSchedule(chatId, sendPreloadText = true) {
     if (sendPreloadText) {
       const message = await sendLoadingText(chatId);
-      bot.editMessageText(
+      await bot.editMessageText(
         await ScheduleController.generateTodaysPlainSchedule(),
         {
           chat_id: message.chat.id,
@@ -63,7 +66,7 @@ class BotController {
         }
       );
     } else {
-      bot.sendMessage(
+      await bot.sendMessage(
         chatId,
         await ScheduleController.generateTodaysPlainSchedule()
       );
@@ -72,7 +75,10 @@ class BotController {
 
   static async sendNearest(chatId) {
     try {
-      bot.sendMessage(chatId, await ScheduleController.getNearestLesson());
+      await bot.sendMessage(
+        chatId,
+        await ScheduleController.getNearestLesson()
+      );
     } catch (err) {
       console.log(err);
     }
@@ -81,7 +87,7 @@ class BotController {
   static async sendLessonStarting(chatId) {
     try {
       const response = await ScheduleController.checkSchedule();
-      response && bot.sendMessage(chatId, response);
+      response && (await bot.sendMessage(chatId, response));
     } catch (err) {
       console.log(err);
     }
