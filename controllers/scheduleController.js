@@ -69,7 +69,7 @@ class ScheduleController {
         sort: { dayNumber: 1, number: 1 },
       }).populate("lesson");
       if (docs.length > 0) {
-        const date = DateTime.nowUtc();
+        const date = DateTime.now();
         const timetableDocs = await TimetableController.getTimetable();
         const week = await WeekController.getWeek();
         const nearestLesson = docs
@@ -84,17 +84,14 @@ class ScheduleController {
           nearestStartTime.startMinute
         )}`;
         const dayDiff = nearestLesson.dayNumber - date.day();
-        const startDate = DateTime.makeUtc(
+        const startDate = DateTime.make(
           date.add(dayDiff, "day").format("YYYY-MM-DD") + ` ${time}`
         );
         const total = startDate.diff(date, "millisecond");
         const seconds = Math.floor((total / 1000) % 60);
         const minutes = Math.floor((total / 1000 / 60) % 60);
         const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
-        const timeToStart = `${ft(hours)}:${ft(minutes)}:${ft(seconds)}`;
-        const toStart = DateTime.make(
-          DateTime.nowUtc().format("YYYY-MM-DD") + timeToStart
-        );
+        const timeToStart = `${ft(hours - 2)}:${ft(minutes)}:${ft(seconds)}`;
         const li = {
           number: nearestLesson.number,
           startTime: `${ft(
@@ -109,7 +106,7 @@ class ScheduleController {
         return (
           "Найближка пара:\n" +
           `№${li.number} (${li.startTime}): ${li.type} ${li.name}, ${li.teacher}\n\n` +
-          `Початок через: ${toStart.format("HH:mm:ss")}`
+          `Початок через: ${timeToStart}`
         );
       }
       return "Розклад пар ще не додано ⚠️";
