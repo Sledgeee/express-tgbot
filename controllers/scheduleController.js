@@ -87,7 +87,7 @@ class ScheduleController {
         const startDate = DateTime.make(
           date.add(dayDiff, "day").format("YYYY-MM-DD") + ` ${time}`
         );
-        const total = Date.parse(startDate) - Date.parse(date);
+        const total = startDate.diff(date, "millisecond");
         const seconds = Math.floor((total / 1000) % 60);
         const minutes = Math.floor((total / 1000 / 60) % 60);
         const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
