@@ -93,7 +93,7 @@ class ScheduleController {
         const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
         const timeToStart = `${ft(hours)}:${ft(minutes)}:${ft(seconds)}`;
         const toStart = DateTime.make(
-          DateTime.now().format("YYYY-MM-DD") + timeToStart
+          DateTime.nowUtc().format("YYYY-MM-DD") + timeToStart
         );
         const li = {
           number: nearestLesson.number,
