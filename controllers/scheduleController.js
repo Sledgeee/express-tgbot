@@ -92,6 +92,9 @@ class ScheduleController {
         const minutes = Math.floor((total / 1000 / 60) % 60);
         const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
         const timeToStart = `${ft(hours)}:${ft(minutes)}:${ft(seconds)}`;
+        const toStart = DateTime.make(
+          DateTime.now().format("YYYY-MM-DD") + timeToStart
+        );
         const li = {
           number: nearestLesson.number,
           startTime: `${ft(
@@ -106,7 +109,7 @@ class ScheduleController {
         return (
           "Найближка пара:\n" +
           `№${li.number} (${li.startTime}): ${li.type} ${li.name}, ${li.teacher}\n\n` +
-          `Початок через: ${timeToStart}`
+          `Початок через: ${toStart.format("HH:mm:ss")}`
         );
       }
       return "Розклад пар ще не додано ⚠️";
