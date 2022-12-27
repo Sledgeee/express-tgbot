@@ -52,6 +52,7 @@ class BotController {
     bot.editMessageText(await ScheduleController.generateFullPlainSchedule(), {
       chat_id: message.chat.id,
       message_id: message.message_id,
+      parse_mode: "HTML",
     });
   }
 
@@ -79,15 +80,6 @@ class BotController {
         chatId,
         await ScheduleController.getNearestLesson()
       );
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  static async sendLessonStarting(chatId) {
-    try {
-      const response = await ScheduleController.checkSchedule();
-      response && (await bot.sendMessage(chatId, response));
     } catch (err) {
       console.log(err);
     }

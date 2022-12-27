@@ -10,16 +10,6 @@ class LessonController {
     return await LessonModel.findOne(data);
   }
 
-  static async getAllLessons() {
-    try {
-      const docs = await LessonModel.find().populate("teacher");
-      return docs.toString();
-    } catch (err) {
-      console.log(err);
-      return "Помилка";
-    }
-  }
-
   static async createLesson(name, shortName, typesStr, teachersStr) {
     try {
       const typesArr = typesStr.split(", ");

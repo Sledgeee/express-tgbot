@@ -6,6 +6,7 @@ const DateTime = require("../lib/datetime");
 const TimetableController = require("./timetableController");
 const ft = require("../lib/ft");
 const ZoomController = require("./zoomController");
+const WeekController = require("./weekController");
 
 class ScheduleController {
   static async addLessonToSchedule(day, number, lesson, type, week) {
@@ -35,20 +36,23 @@ class ScheduleController {
         sort: { dayNumber: 1, number: 1 },
       }).populate("lesson");
       if (docs.length > 0) {
+        const week = await WeekController.getWeek();
         const timetableDocs = await TimetableController.getTimetable();
         let day = docs[0].day;
-        let plainText = day + ":\n";
+        let plainText = `<b>Цього тижня пари по ${week}у\n${day}:</b>\n`;
         for (const doc of docs) {
           const teacher = await TeacherController.findById(doc.lesson.teacher);
           if (day != doc.day) {
             day = doc.day;
-            plainText += "\n" + day + ":\n";
+            plainText += `\n<b>${day}</b>:\n`;
           }
-          plainText += `№${doc.number} (${ft(
-            timetableDocs[doc.number - 1].startHour
-          )}:${ft(timetableDocs[doc.number - 1].startMinute)}): ${
-            doc.lesson.type
-          } ${doc.lesson.name}, ${teacher.name}\n`;
+          if (doc.week === week || doc.week === "-") {
+            plainText += `№${doc.number} (${ft(
+              timetableDocs[doc.number - 1].startHour
+            )}:${ft(timetableDocs[doc.number - 1].startMinute)}): ${
+              doc.lesson.type
+            } ${doc.lesson.name}, ${teacher.name}\n`;
+          }
         }
         return plainText;
       }
@@ -67,8 +71,12 @@ class ScheduleController {
       if (docs.length > 0) {
         const date = DateTime.now();
         const timetableDocs = await TimetableController.getTimetable();
-        const scheduleDocs = docs.sort((x) => x.dayNumber > date.day());
-        const nearestLesson = scheduleDocs[0];
+        const week = await WeekController.getWeek();
+        const nearestLesson = docs
+          .filter((x) => x.week === week || x.week === "-")
+          .filter(
+            (x) => x.dayNumber === date.day() || x.dayNumber > date.day()
+          )[0];
         const nearestStartTime = timetableDocs.filter(
           (x) => x.number === nearestLesson.number
         )[0];
@@ -86,15 +94,17 @@ class ScheduleController {
           startTime: `${ft(
             timetableDocs[nearestLesson.number - 1].startHour
           )}:${ft(timetableDocs[nearestLesson.number - 1].startMinute)}`,
-          ltype: nearestLesson.lesson.type,
+          type: nearestLesson.lesson.type,
           name: nearestLesson.lesson.name,
           teacher: (
             await TeacherController.findById(nearestLesson.lesson.teacher)
           ).name,
         };
-        return `Найближка пара:
-        №${li.number} (${li.startTime}): ${li.ltype} ${li.name}, ${li.teacher}
-        Початок через: ${timeToStart}`;
+        return (
+          "Найближка пара:\n" +
+          `№${li.number} (${li.startTime}): ${li.type} ${li.name}, ${li.teacher}\n\n` +
+          `Початок через: ${timeToStart}`
+        );
       }
       return "Розклад пар ще не додано ⚠️";
     } catch (err) {
@@ -110,12 +120,14 @@ class ScheduleController {
       }).populate("lesson");
       if (docs.length > 0) {
         const timetableDocs = await TimetableController.getTimetable();
+        const week = await WeekController.getWeek();
         const todaysSchedule = docs.filter(
           (x) => x.dayNumber == DateTime.now().day()
         );
         if (todaysSchedule.length > 0) {
-          let plainText = "";
+          let plainText = `Сьогодні пари по ${week}у:\n`;
           for (const doc of todaysSchedule) {
+            if (doc.week !== week && doc.week !== "") continue;
             const teacher = await TeacherController.findById(
               doc.lesson.teacher
             );
@@ -143,8 +155,11 @@ class ScheduleController {
       }).populate("lesson");
       if (docs.length > 0) {
         const now = DateTime.now();
+        const week = await WeekController.getWeek();
         const td = await TimetableController.getTimetable();
-        const todaysSchedule = docs.filter((x) => x.dayNumber === now.day());
+        const todaysSchedule = docs
+          .filter((x) => x.dayNumber === now.day())
+          .filter((x) => x.week === week || x.week === "-");
         for (const item of todaysSchedule) {
           let hour = td[item.number - 1].startHour;
           let minute = td[item.number - 1].startMinute - 5;
