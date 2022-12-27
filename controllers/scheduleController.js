@@ -86,8 +86,18 @@ class ScheduleController {
           if (tDocs[lesson.number - 1].startHour < date.hour()) {
             nextLesson = tDocs[lesson.number - 1];
             nearestLesson = filteredDocs.filter(
-              (x) => x.dayNumber === date.day() + 1
+              (x) =>
+                x.dayNumber ===
+                (date.day() + 1 > docs.at(-1).dayNumber ? 1 : date.day() + 1)
             )[0];
+            if (date.day() + 1 !== nearestLesson.dayNumber) {
+              nearestLesson = docs.filter(
+                (x) =>
+                  x.week ===
+                    (week === "Чисельник" ? "Знаменник" : "Чисельник") ||
+                  x.week === "-"
+              )[0];
+            }
             break;
           } else {
             const startTime = DateTime.make(
