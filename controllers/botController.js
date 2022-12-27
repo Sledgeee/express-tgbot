@@ -57,29 +57,36 @@ class BotController {
   }
 
   static async sendTodaysSchedule(chatId, sendPreloadText = true) {
-    if (sendPreloadText) {
-      const message = await sendLoadingText(chatId);
-      await bot.editMessageText(
-        await ScheduleController.generateTodaysPlainSchedule(),
-        {
-          chat_id: message.chat.id,
-          message_id: message.message_id,
-        }
-      );
-    } else {
-      await bot.sendMessage(
-        chatId,
-        await ScheduleController.generateTodaysPlainSchedule()
-      );
+    try {
+      if (sendPreloadText) {
+        const message = await sendLoadingText(chatId);
+        await bot.editMessageText(
+          await ScheduleController.generateTodaysPlainSchedule(),
+          {
+            chat_id: message.chat.id,
+            message_id: message.message_id,
+            parse_mode: "HTML",
+          }
+        );
+      } else {
+        await bot.sendMessage(
+          chatId,
+          await ScheduleController.generateTodaysPlainSchedule()
+        );
+      }
+    } catch (err) {
+      console.log(err);
     }
   }
 
   static async sendNearest(chatId) {
     try {
-      await bot.sendMessage(
-        chatId,
-        await ScheduleController.getNearestLesson()
-      );
+      const message = await sendLoadingText(chatId, "Пошук...");
+      await bot.editMessageText(await ScheduleController.getNearestLesson(), {
+        chat_id: message.chat.id,
+        message_id: message.message_id,
+        parse_mode: "HTML",
+      });
     } catch (err) {
       console.log(err);
     }
@@ -139,8 +146,8 @@ class BotController {
   }
 }
 
-const sendLoadingText = async (chatId) => {
-  return await bot.sendMessage(chatId, "Генерація...");
+const sendLoadingText = async (chatId, message = "Генерація...") => {
+  return await bot.sendMessage(chatId, message);
 };
 
 module.exports = BotController;

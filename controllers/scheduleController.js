@@ -69,19 +69,43 @@ class ScheduleController {
         sort: { dayNumber: 1, number: 1 },
       }).populate("lesson");
       if (docs.length > 0) {
-        const date = DateTime.now();
-        const timetableDocs = await TimetableController.getTimetable();
+        const tDocs = await TimetableController.getTimetable();
         const week = await WeekController.getWeek();
-        const nearestLesson = docs
-          .filter((x) => x.week === week || x.week === "-")
-          .filter(
-            (x) => x.dayNumber === date.day() || x.dayNumber > date.day()
-          )[0];
-        const nearestStartTime = timetableDocs.filter(
-          (x) => x.number === nearestLesson.number
-        )[0];
-        const time = `${ft(nearestStartTime.startHour)}:${ft(
-          nearestStartTime.startMinute
+        const date = DateTime.now();
+        const filteredDocs = docs.filter(
+          (x) => x.week === week || x.week === "-"
+        );
+        const todaysSchedule = filteredDocs.filter(
+          (x) => x.dayNumber === date.day()
+        );
+
+        let nextLesson;
+        let nearestLesson;
+
+        for (const lesson of todaysSchedule) {
+          if (tDocs[lesson.number - 1].startHour < date.hour()) {
+            nextLesson = tDocs[lesson.number - 1];
+            nearestLesson = filteredDocs.filter(
+              (x) => x.dayNumber === date.day() + 1
+            )[0];
+            break;
+          } else {
+            const startTime = DateTime.make(
+              date.format("YYYY-MM-DD") +
+                ` ${tDocs[lesson.number - 1].startHour}:${
+                  tDocs[lesson.number - 1].startMinute
+                }`
+            );
+            if (startTime > date) {
+              nextLesson = tDocs[lesson.number - 1];
+              nearestLesson = lesson;
+              break;
+            }
+          }
+        }
+
+        const time = `${ft(nextLesson.startHour)}:${ft(
+          nextLesson.startMinute
         )}`;
         const dayDiff = nearestLesson.dayNumber - date.day();
         const startDate = DateTime.make(
@@ -94,9 +118,9 @@ class ScheduleController {
         const timeToStart = `${ft(hours - 2)}:${ft(minutes)}:${ft(seconds)}`;
         const li = {
           number: nearestLesson.number,
-          startTime: `${ft(
-            timetableDocs[nearestLesson.number - 1].startHour
-          )}:${ft(timetableDocs[nearestLesson.number - 1].startMinute)}`,
+          startTime: `${ft(tDocs[nearestLesson.number - 1].startHour)}:${ft(
+            tDocs[nearestLesson.number - 1].startMinute
+          )}`,
           type: nearestLesson.lesson.type,
           name: nearestLesson.lesson.name,
           teacher: (
@@ -125,12 +149,12 @@ class ScheduleController {
         const timetableDocs = await TimetableController.getTimetable();
         const week = await WeekController.getWeek();
         const todaysSchedule = docs.filter(
-          (x) => x.dayNumber == DateTime.now().day()
+          (x) => x.dayNumber === DateTime.now().day()
         );
         if (todaysSchedule.length > 0) {
-          let plainText = `Сьогодні пари по ${week}у:\n`;
+          let plainText = `<b>Сьогодні пари по ${week}у:</b>\n`;
           for (const doc of todaysSchedule) {
-            if (doc.week !== week && doc.week !== "") continue;
+            if (doc.week !== week && doc.week !== "-") continue;
             const teacher = await TeacherController.findById(
               doc.lesson.teacher
             );
