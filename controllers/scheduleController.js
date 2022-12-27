@@ -87,8 +87,11 @@ class ScheduleController {
         const startDate = DateTime.make(
           date.add(dayDiff, "day").format("YYYY-MM-DD") + ` ${time}`
         );
-        const ms = startDate.diff(date, "milliseconds");
-        const timeToStart = new Date(ms).toISOString().substring(11, 19);
+        const total = Date.parse(startDate) - Date.parse(date);
+        const seconds = Math.floor((total / 1000) % 60);
+        const minutes = Math.floor((total / 1000 / 60) % 60);
+        const hours = Math.floor((total / (1000 * 60 * 60)) % 24);
+        const timeToStart = `${ft(hours)}:${ft(minutes)}:${ft(seconds)}`;
         const li = {
           number: nearestLesson.number,
           startTime: `${ft(
