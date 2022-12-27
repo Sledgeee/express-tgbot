@@ -69,7 +69,7 @@ class ScheduleController {
         sort: { dayNumber: 1, number: 1 },
       }).populate("lesson");
       if (docs.length > 0) {
-        const date = DateTime.now();
+        const date = DateTime.nowUtc();
         const timetableDocs = await TimetableController.getTimetable();
         const week = await WeekController.getWeek();
         const nearestLesson = docs
