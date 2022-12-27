@@ -84,7 +84,7 @@ class ScheduleController {
           nearestStartTime.startMinute
         )}`;
         const dayDiff = nearestLesson.dayNumber - date.day();
-        const startDate = DateTime.make(
+        const startDate = DateTime.makeUtc(
           date.add(dayDiff, "day").format("YYYY-MM-DD") + ` ${time}`
         );
         const total = startDate.diff(date, "millisecond");
