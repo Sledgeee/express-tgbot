@@ -2,7 +2,7 @@ const { bot } = require("../lib/bot");
 const startMarkup = require("../markups/startMarkup");
 const BotController = require("../controllers/botController");
 
-const { BOT_TAG_TEST: BOT_TAG } = process.env;
+const { BOT_TAG } = process.env;
 const commands = {
   start: {
     command: "/start" + BOT_TAG,
