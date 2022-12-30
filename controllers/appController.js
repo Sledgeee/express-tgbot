@@ -4,6 +4,7 @@ const AppModel = require("../models/appModel");
 class AppController {
   static async applyDefaultSettings() {
     try {
+      await AppModel.deleteOne({});
       await AppModel.create({
         cron: {
           startOnStartup: true,
@@ -22,6 +23,10 @@ class AppController {
             },
             {
               name: jobNames.swapWeek,
+              startOnStartup: true,
+            },
+            {
+              name: jobNames.newYear,
               startOnStartup: true,
             },
           ],
